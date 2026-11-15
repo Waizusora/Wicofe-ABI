@@ -13,6 +13,10 @@ The canonical interface contract between the Wicofe kernel and userspace.
 
 This repository defines the contract; Wicofe-Kernel implements kernel-side behavior, while Wicofe-Libc and Wicofe-Lib provide userspace interfaces. Do not duplicate or independently renumber syscall definitions in dependent repositories.
 
+## Specification
+
+- [Userspace ABI specification baseline](SPECIFICATION_BASELINE.md)
+
 ## Compatibility rules
 
 Every public interface must document stability level, version introduction, reserved fields, error behavior, and migration policy. Never expose Rust compiler-private layout as a stable ABI; use explicit C-compatible representations where required.

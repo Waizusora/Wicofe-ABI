@@ -28,3 +28,7 @@ Initial repository baseline. The ABI is not yet declared stable. Proposed interf
 ## License
 
 Original project material is intended for MPL-2.0. Third-party specifications and copied material retain their own terms and attribution requirements.
+
+## Documentation
+
+See [docs/INDEX.md](docs/INDEX.md) for this repository's technical documentation. The [central repository documentation map](https://github.com/Waizusora/Wicofe-Docs/blob/main/REPOSITORY_DOCUMENTATION_MAP.md) identifies canonical ownership and cross-repository boundaries.

@@ -13,6 +13,10 @@ The canonical interface contract between the Wicofe kernel and userspace.
 
 This repository defines the contract; Wicofe-Kernel implements kernel-side behavior, while Wicofe-Libc and Wicofe-Lib provide userspace interfaces. Do not duplicate or independently renumber syscall definitions in dependent repositories.
 
+## Frenit integration consumer
+
+[Frenit (Free Init)](https://github.com/Waizusora/Frenit) is a planned userspace consumer of process, exec, wait/reap, signal, descriptor, clock, IPC and shutdown interfaces. This repository remains the sole owner of their public syscall numbers, calling convention, data layouts and error semantics. Frenit and Wicofe-Kernel must not invent parallel syscall definitions or assume Linux binary ABI compatibility. Native Frenit PID 1 integration remains blocked until the relevant ABI entries are specified, reviewed and implemented.
+
 ## Specification
 
 - [Userspace ABI specification baseline](SPECIFICATION_BASELINE.md)

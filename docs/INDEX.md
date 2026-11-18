@@ -5,8 +5,7 @@ This directory contains documentation for the public Wicofe userspace/kernel ABI
 ## Canonical specification
 
 - [Specification baseline](../SPECIFICATION_BASELINE.md)
-- [Osynit ABI requirements 0.1](OSYNIT_ABI_REQUIREMENTS_0.1.md) — capability requirements without syscall assignments.
-- [Osynit ABI requirements 0.1](OSYNIT_ABI_REQUIREMENTS_0.1.md) — required capability domains; assigns no syscall numbers or layouts.
+- [Frenit ABI requirements 0.1](FRENIT_ABI_REQUIREMENTS_0.1.md) — capability requirements without syscall numbers or layouts.
 
 ## Scope
 

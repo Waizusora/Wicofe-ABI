@@ -99,11 +99,12 @@ The calling convention only defines entry and result transport. Individual sysca
 
 ## 8. Remaining specification work
 
-The carry-flag decision is accepted. The following are still open and must be specified before the ABI is declared stable:
-- canonical errno values and public header generation;
+The carry-flag decision, initial errno assignments, and general-purpose register preservation contract are adopted. The following remain open before the ABI can be declared stable:
 - signal-frame representation and restoration of user condition state;
 - syscall identifier ranges and ABI version/capability discovery;
-- signal-frame representation and restoration of user condition state;
-- per-syscall interruption, restart, blocking and cancellation behavior.
+- per-syscall interruption, restart, blocking and cancellation behavior;
+- process entry, executable loading, TLS and dynamic-linker contracts.
+
+See [Errno Namespace 0.1](ERRNO_NAMESPACE_0.1.md) and [Syscall Register Preservation 0.1](SYSCALL_REGISTER_PRESERVATION_0.1.md) for the adopted supporting contracts.
 
 No syscall numbers are implied or assigned by this calling-convention decision.

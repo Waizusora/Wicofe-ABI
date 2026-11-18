@@ -101,7 +101,7 @@ The calling convention only defines entry and result transport. Individual sysca
 
 The carry-flag decision is accepted. The following are still open and must be specified before the ABI is declared stable:
 - canonical errno values and public header generation;
-- exact GPR preservation and condition-code clobber contract;
+- signal-frame representation and restoration of user condition state;
 - syscall identifier ranges and ABI version/capability discovery;
 - signal-frame representation and restoration of user condition state;
 - per-syscall interruption, restart, blocking and cancellation behavior.

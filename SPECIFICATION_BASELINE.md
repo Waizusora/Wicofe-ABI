@@ -3,13 +3,15 @@
 - **Status:** Draft; not stable
 - **Version:** 0.1
 - **Owner:** Wicofe-ABI
-- **Implementations:** Wicofe-Kernel, Wicofe-Libc, Wicofe-Lib, Wicofe-SDK
+- **Implementations:** Wicofe-Kernel, Wlibc, Wicofe-Lib, Wicofe-SDK
 
 ## 1. Scope
 
 This repository is the canonical source for the public interface between Wicofe user processes and the kernel. It owns syscall identifiers, calling conventions, user-visible structures, constants, error semantics, and compatibility policy.
 
 The Dynamic Kernel Module ABI is not defined here. DKM is a privileged in-kernel interface owned by Wicofe-Kernel and documented separately.
+
+The userspace ABI must support the native ISO C/POSIX runtime contract documented in the [Unix userspace foundation specification](https://github.com/Waizusora/Wicofe-Specs/blob/main/userspace/UNIX_USERSPACE_FOUNDATION_0.1.md). POSIX library interfaces are implemented by Wlibc; they are not automatically one-to-one with syscalls.
 
 ## 2. Design principles
 
@@ -20,6 +22,7 @@ The Dynamic Kernel Module ABI is not defined here. DKM is a privileged in-kernel
 - Version every public interface and document its stability.
 - Preserve compatibility once an interface is declared stable.
 - Generate headers/bindings from canonical definitions where practical to prevent drift.
+- Specify semantics needed by the declared POSIX profile without importing host-kernel ABI assumptions.
 
 ## 3. Planned interface domains
 
@@ -35,7 +38,7 @@ The initial ABI is expected to cover these domains in dependency order:
 8. Identity, permissions, and resource limits.
 9. System information and capability discovery.
 
-This is a scope outline, not a promise that every listed interface will be part of the first ABI release.
+This is a scope outline, not a promise that every listed interface will be part of the first ABI release. Some POSIX interfaces are implemented in userspace using multiple syscalls or library algorithms.
 
 ## 4. Per-call specification template
 
@@ -90,5 +93,6 @@ The following are not part of this repository's userspace ABI:
 - Private in-kernel Rust interfaces.
 - ONWFS on-disk format.
 - Userspace service protocols unless explicitly promoted to a system-wide public ABI.
+- GNU/BSD library extension APIs; Wicofe's C runtime target is the declared ISO C/POSIX profile.
 
 **No syscall numbers or register assignments are frozen by this baseline.**

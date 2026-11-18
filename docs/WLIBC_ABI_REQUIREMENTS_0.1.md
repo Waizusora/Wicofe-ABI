@@ -1,6 +1,6 @@
 # Wlibc Native ABI Requirements 0.1
 
-- **Status:** Draft requirements; no syscall numbers or register assignments are frozen.
+- **Status:** Draft requirements; carry-flag result convention, initial errno values, and register preservation contract are adopted; syscall numbers remain unassigned.
 - **Owner:** Wicofe-ABI.
 - **Consumer:** [Wlibc](https://github.com/Waizusora/WLibc).
 - **Kernel implementation:** [Wicofe-Kernel](https://github.com/Waizusora/Wicofe-Kernel).
@@ -14,7 +14,7 @@ Define the kernel/userspace ABI capabilities required to port the pinned musl 1.
 
 The following contracts are prerequisites for a native Wlibc backend:
 
-1. **Raw syscall boundary:** x86-64 and AArch64 entry mechanism, argument registers, clobbers, return register, success range, raw error encoding and interruption rules.
+1. **Raw syscall boundary:** x86-64 and AArch64 entry mechanism, argument registers, clobbers, return register, carry-flag result encoding and interruption rules.
 2. **Process startup:** executable entry state, stack alignment, argc/argv/envp, auxiliary data policy, environment/security metadata, process exit and exec semantics.
 3. **Virtual memory:** page-size discovery, map/unmap/protect, shared/private mappings, file-backed mappings, anonymous mappings, fixed-address rules and failure behavior.
 4. **File descriptors and VFS:** open/close/read/write, seek, metadata, directory iteration, descriptor duplication, pipes, polling, blocking, partial I/O and close-on-exec semantics.
@@ -40,7 +40,7 @@ The existing ABI baseline leaves raw syscall error encoding undecided. This is a
 
 ## 6. Implementation order
 
-1. Freeze raw syscall entry and error convention for both architectures.
+1. Complete raw syscall stub and kernel entry/return implementation against the adopted convention.
 2. Specify process entry and termination.
 3. Specify VM and descriptor/VFS primitives.
 4. Specify process/thread lifecycle, TLS and wait/wake.

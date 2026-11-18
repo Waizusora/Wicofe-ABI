@@ -65,7 +65,7 @@ The raw syscall result/error encoding is adopted as follows:
 - On success, the result register contains the full operation result; negative signed success values are not reserved as errors.
 - Wlibc maps raw errors to the relevant POSIX failure return and thread-local `errno`.
 
-The canonical errno values and aliases must be defined in this repository before syscall implementation. The kernel must not write userspace TLS.
+Canonical initial errno values and aliases are defined in [Errno Namespace 0.1](docs/ERRNO_NAMESPACE_0.1.md); register preservation is defined in [Syscall Register Preservation 0.1](docs/SYSCALL_REGISTER_PRESERVATION_0.1.md). The kernel must not write userspace TLS.
 
 See [Wicofe syscall calling convention 0.1](docs/SYSCALL_CALLING_CONVENTION_PROPOSAL_0.1.md) and [technical review](docs/SYSCALL_CONVENTION_TECHNICAL_REVIEW_0.1.md).
 

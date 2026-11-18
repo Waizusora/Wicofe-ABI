@@ -7,6 +7,7 @@ This directory contains documentation for the public Wicofe userspace/kernel ABI
 - [Specification baseline](../SPECIFICATION_BASELINE.md)
 - [Frenit ABI requirements 0.1](FRENIT_ABI_REQUIREMENTS_0.1.md) — capability requirements without syscall numbers or layouts.
 - [Wlibc Native ABI Requirements 0.1](WLIBC_ABI_REQUIREMENTS_0.1.md) — kernel ABI prerequisites for the native ISO C/POSIX runtime.
+- [Syscall calling convention proposal 0.1](SYSCALL_CALLING_CONVENTION_PROPOSAL_0.1.md) — candidate x86-64/AArch64 entry and error-return convention; not yet accepted.
 
 ## Scope
 

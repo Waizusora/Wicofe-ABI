@@ -40,7 +40,7 @@ The existing ABI baseline leaves raw syscall error encoding undecided. This is a
 
 ## 6. Implementation order
 
-1. Complete raw syscall stub and kernel entry/return implementation against the adopted convention.
+1. Implement and validate the raw syscall stub and kernel entry/return path against the adopted convention.
 2. Specify process entry and termination.
 3. Specify VM and descriptor/VFS primitives.
 4. Specify process/thread lifecycle, TLS and wait/wake.

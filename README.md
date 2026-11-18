@@ -16,7 +16,7 @@ This repository defines the contract; Wicofe-Kernel implements kernel-side behav
 
 ## Wlibc and POSIX runtime consumer
 
-[Wlibc](https://github.com/Waizusora/Wicofe-Libc) is the native C library and POSIX runtime project. It is planned to fork musl and adapt its runtime to this repository's native Wicofe syscall ABI. Wlibc targets the declared ISO C/POSIX profile; GNU and BSD compatibility extensions are not project requirements. Any separate POSIX layer must consume this same ABI and must not define competing syscall numbers, structures, or error conventions.
+[Wlibc](https://github.com/Waizusora/WLibc) is the native C library and POSIX runtime project. It is planned to fork musl and adapt its runtime to this repository's native Wicofe syscall ABI. Wlibc targets the declared ISO C/POSIX profile; GNU and BSD compatibility extensions are not project requirements. Any separate POSIX layer must consume this same ABI and must not define competing syscall numbers, structures, or error conventions.
 
 ## Frenit integration consumer
 

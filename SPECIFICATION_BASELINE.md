@@ -21,7 +21,7 @@ The userspace ABI must support the native ISO C/POSIX runtime contract documente
 - Validate all user pointers, lengths, offsets, and flags in the kernel.
 - Version every public interface and document its stability.
 - Preserve compatibility once an interface is declared stable.
-- Generate headers/bindings from canonical definitions where practical to prevent drift.
+- Generate headers/bindings from canonical definitions where practical.
 - Specify semantics needed by the declared POSIX profile without importing host-kernel ABI assumptions.
 
 ## 3. Planned interface domains
@@ -29,7 +29,6 @@ The userspace ABI must support the native ISO C/POSIX runtime contract documente
 The initial C runtime target is ISO C17 and IEEE Std 1003.1-2024 (POSIX.1-2024). Wlibc-specific kernel capability requirements are enumerated in [Wlibc Native ABI Requirements 0.1](docs/WLIBC_ABI_REQUIREMENTS_0.1.md).
 
 The initial ABI is expected to cover these domains in dependency order:
-
 1. Process and thread lifecycle.
 2. Memory mapping and address-space operations.
 3. File descriptors and filesystem operations.
@@ -44,20 +43,7 @@ This is a scope outline, not a promise that every listed interface will be part 
 
 ## 4. Per-call specification template
 
-Every proposed syscall must document:
-
-| Field | Required content |
-|---|---|
-| Name and number | Unique stable identifier; number remains unassigned until reviewed |
-| Availability | Architecture and minimum ABI version |
-| Arguments | Order, type, width, signedness, alignment, pointer direction |
-| Return | Success value and raw failure representation |
-| Errors | Defined error conditions and libc mapping |
-| Blocking | Whether it may block, be interrupted, or be restarted |
-| Permissions | Required identity, capability, or object rights |
-| Side effects | State changes and partial-completion behavior |
-| Stability | Draft, experimental, stable, or deprecated |
-| Tests | Positive, negative, boundary, and compatibility cases |
+Every proposed syscall must document its name and number, availability, arguments, return values, errors, blocking/interruption behavior, permissions, side effects, stability and tests. Numeric identifiers remain unassigned until reviewed.
 
 ## 5. Data representation rules
 
@@ -69,17 +55,23 @@ Reserved fields must have explicit rules. Callers should initialize reserved inp
 
 Do not pass Rust `String`, `Vec`, references, slices, trait objects, or compiler-layout enums across the ABI.
 
-## 6. Error convention
+## 6. Error convention — adopted
 
-The raw syscall error convention is not yet selected. The specification must choose one convention and define the complete valid success range so that errors cannot be confused with successful return values.
+The raw syscall result/error encoding is adopted as follows:
 
-The libc layer will translate raw kernel errors into the C `errno` contract. The kernel ABI and libc wrapper must not independently invent error numbers or mappings.
+- x86-64: result in RAX; RFLAGS.CF = 0 means success and RFLAGS.CF = 1 means failure.
+- AArch64: result in X0; PSTATE.C = 0 means success and PSTATE.C = 1 means failure.
+- On failure, the result register contains a positive value from the Wicofe errno namespace.
+- On success, the result register contains the full operation result; negative signed success values are not reserved as errors.
+- Wlibc maps raw errors to the relevant POSIX failure return and thread-local `errno`.
+
+The canonical errno values and aliases must be defined in this repository before syscall implementation. The kernel must not write userspace TLS.
+
+See [Wicofe syscall calling convention 0.1](docs/SYSCALL_CALLING_CONVENTION_PROPOSAL_0.1.md) and [technical review](docs/SYSCALL_CONVENTION_TECHNICAL_REVIEW_0.1.md).
 
 ## 7. Architecture policy
 
-The initial target architectures are x86-64 and AArch64. The ABI must state the syscall-entry mechanism and register assignment for each architecture while preserving the same logical syscall semantics.
-
-Architecture-specific register details must not leak into portable userspace headers. Provide architecture-specific low-level stubs or generated bindings as needed.
+The initial target architectures are x86-64 and AArch64. The ABI defines `SYSCALL` and `SVC #0` as the entry mechanisms, with architecture-specific register assignments in the calling-convention document. Portable userspace headers must not expose architecture register details.
 
 ## 8. Versioning and stability
 
@@ -90,11 +82,10 @@ Kernel and userspace components must negotiate or expose supported ABI capabilit
 ## 9. Initial exclusions
 
 The following are not part of this repository's userspace ABI:
-
 - DKM metadata and kernel module loading ABI.
 - Private in-kernel Rust interfaces.
 - ONWFS on-disk format.
 - Userspace service protocols unless explicitly promoted to a system-wide public ABI.
 - GNU/BSD library extension APIs; Wicofe's C runtime target is the declared ISO C/POSIX profile.
 
-**No syscall numbers or register assignments are frozen by this baseline.**
+No syscall numbers or syscall identifier ranges are assigned by this calling-convention decision.

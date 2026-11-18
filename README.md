@@ -8,10 +8,15 @@ The canonical interface contract between the Wicofe kernel and userspace.
 - User/kernel data structures, alignment, size, and versioning rules.
 - Process, thread, memory, file descriptor, signal, and time interfaces.
 - ABI compatibility policy and generated bindings where appropriate.
+- POSIX-facing behavior required by Wlibc, without importing host-kernel ABI assumptions.
 
 ## Ownership boundaries
 
-This repository defines the contract; Wicofe-Kernel implements kernel-side behavior, while Wicofe-Libc and Wicofe-Lib provide userspace interfaces. Do not duplicate or independently renumber syscall definitions in dependent repositories.
+This repository defines the contract; Wicofe-Kernel implements kernel-side behavior, while Wlibc and Wicofe-Lib provide userspace interfaces. Do not duplicate or independently renumber syscall definitions in dependent repositories.
+
+## Wlibc and POSIX runtime consumer
+
+[Wlibc](https://github.com/Waizusora/Wicofe-Libc) is the native C library and POSIX runtime project. It is planned to fork musl and adapt its runtime to this repository's native Wicofe syscall ABI. Wlibc targets the declared ISO C/POSIX profile; GNU and BSD compatibility extensions are not project requirements. Any separate POSIX layer must consume this same ABI and must not define competing syscall numbers, structures, or error conventions.
 
 ## Frenit integration consumer
 
@@ -20,6 +25,7 @@ This repository defines the contract; Wicofe-Kernel implements kernel-side behav
 ## Specification
 
 - [Userspace ABI specification baseline](SPECIFICATION_BASELINE.md)
+- [Unix userspace foundation](https://github.com/Waizusora/Wicofe-Specs/blob/main/userspace/UNIX_USERSPACE_FOUNDATION_0.1.md)
 
 ## Compatibility rules
 
@@ -35,4 +41,4 @@ Original project material is intended for MPL-2.0. Third-party specifications an
 
 ## Documentation
 
-See [docs/INDEX.md](docs/INDEX.md) for this repository's technical documentation. The [central repository documentation map](https://github.com/Waizusora/Wicofe-Docs/blob/main/REPOSITORY_DOCUMENTATION_MAP.md) identifies canonical ownership and cross-repository boundaries.
+See [docs/INDEX.md](docs/INDEX.md) for technical documentation. The [central repository documentation map](https://github.com/Waizusora/Wicofe-Docs/blob/main/REPOSITORY_DOCUMENTATION_MAP.md) identifies canonical ownership and cross-repository boundaries.

@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: MIT
+/* SPDX-License-Identifier: MPL-2.0
  * Wicofe errno constants, ABI 0.1.
  * Canonical source: Wicofe-ABI/docs/ERRNO_NAMESPACE_0.1.md
  */

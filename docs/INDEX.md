@@ -8,12 +8,13 @@ This directory contains documentation for the public Wicofe userspace/kernel ABI
 - [Frenit ABI requirements 0.1](FRENIT_ABI_REQUIREMENTS_0.1.md) — capability requirements without syscall numbers or layouts.
 - [Wlibc Native ABI Requirements 0.1](WLIBC_ABI_REQUIREMENTS_0.1.md) — kernel ABI prerequisites for the native ISO C/POSIX runtime.
 - [Syscall calling convention proposal 0.1](SYSCALL_CALLING_CONVENTION_PROPOSAL_0.1.md) — candidate x86-64/AArch64 entry and error-return convention; not yet accepted.
+- [Syscall convention technical review 0.1](SYSCALL_CONVENTION_TECHNICAL_REVIEW_0.1.md) — architecture and compiler constraints, required validation, and adoption gates; proposal remains unaccepted.
 
 ## Scope
 
 Document syscall numbers, architecture calling conventions, argument widths, pointer rules, structures, errors, process/thread interfaces, file descriptors, signals, time, memory mapping, compatibility, and generated bindings.
 
-The kernel implements this contract in [Wicofe-Kernel](https://github.com/Waizusora/Wicofe-Kernel). C runtime adaptation belongs to [Wicofe-Libc](https://github.com/Waizusora/WLibc); safe Rust userspace wrappers belong to [Wicofe-Lib](https://github.com/Waizusora/Wicofe-Lib).
+The kernel implements this contract in [Wicofe-Kernel](https://github.com/Waizusora/Wicofe-Kernel). C runtime adaptation belongs to [Wlibc](https://github.com/Waizusora/WLibc); safe Rust userspace wrappers belong to [Wicofe-Lib](https://github.com/Waizusora/Wicofe-Lib).
 
 ## Stability
 

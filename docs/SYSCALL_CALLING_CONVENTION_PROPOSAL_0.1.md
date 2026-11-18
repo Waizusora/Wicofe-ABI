@@ -1,9 +1,10 @@
-# Wicofe Syscall Calling Convention Proposal 0.1
+# Wicofe Syscall Calling Convention 0.1
 
-- **Status:** Proposed; not frozen or implemented.
+- **Status:** Accepted design decision; implementation and validation pending.
 - **Owner:** Wicofe-ABI.
 - **Consumers:** Wicofe-Kernel, Wlibc, Wicofe-SDK, Wicofe-Lib.
 - **Initial architectures:** x86-64 and AArch64.
+- **Decision:** Use the architecture carry condition as the out-of-band syscall error discriminator on both initial architectures.
 
 ## 1. Goals
 
@@ -14,9 +15,9 @@ Define a small, architecture-aware syscall entry contract for Wicofe that:
 - has explicit register clobber and preservation rules;
 - does not claim Linux syscall-number, structure, semantic, or binary compatibility.
 
-The register choices below use the architectures' conventional trap mechanisms. This does not make the Wicofe syscall ABI Linux-compatible: syscall identifiers, error signaling, public structures, semantics, executable ABI and versioning remain Wicofe-defined.
+The register choices use the architectures' conventional trap mechanisms. This does not make the Wicofe syscall ABI Linux-compatible: syscall identifiers, error signaling, public structures, semantics, executable ABI and versioning remain Wicofe-defined.
 
-## 2. x86-64 proposal
+## 2. x86-64
 
 Use the `SYSCALL` instruction.
 
@@ -38,10 +39,11 @@ Rules:
 - On failure, the kernel returns a positive Wicofe errno value in RAX and sets CF.
 - The kernel returns with `SYSRETQ` or a validated equivalent path that restores the defined CF state.
 - RCX and R11 are clobbered by the architectural instruction and must be declared as such by the userspace stub.
-- Other general-purpose registers are preserved unless a future ABI revision explicitly changes this rule.
+- The syscall stub must capture CF in the same compiler-visible assembly operation as `SYSCALL`.
+- Other general-purpose register preservation and user condition-code clobber details must match the kernel's published entry-frame contract; they must not be assumed by libc until verified.
 - The syscall identifier namespace is assigned only by Wicofe-ABI. Linux syscall numbers must not be copied or treated as aliases.
 
-## 3. AArch64 proposal
+## 3. AArch64
 
 Use `SVC #0`.
 
@@ -56,18 +58,20 @@ Use `SVC #0`.
 Rules:
 - On success, the kernel returns the operation's result in X0 and clears PSTATE.C.
 - On failure, the kernel returns a positive Wicofe errno value in X0 and sets PSTATE.C in the saved program status restored by `ERET`.
-- The userspace stub reads the restored condition flags after `SVC` to distinguish success from failure.
-- X1–X5 and all other general-purpose registers are preserved unless a future ABI revision explicitly changes this rule.
+- The userspace stub captures C in the same assembly block as `SVC`, before compiler-generated code can change condition flags.
+- X8 is the syscall identifier register and must be treated as clobbered by the stub. X0 is input/output.
+- Preservation of X1–X5 and all other general-purpose registers must match the kernel's published exception-frame contract; it must not be assumed by libc until verified.
 - The syscall identifier namespace is assigned only by Wicofe-ABI. Linux syscall numbers must not be copied or treated as aliases.
 
 ## 4. Common result semantics
 
 - Success and failure are distinguished by the architecture's carry flag, not by the sign or numeric range of the result.
-- On failure, the result register contains a positive errno value from the Wicofe errno namespace.
-- Wlibc converts the raw failure to the POSIX convention: return the interface-specific failure value and set thread-local `errno`.
+- On success, the primary result register contains the operation result and carry is clear.
+- On failure, the primary result register contains a positive errno value from the Wicofe errno namespace and carry is set.
+- Wlibc converts raw failure to the interface-specific POSIX failure value and sets thread-local `errno`.
 - The kernel must not write userspace TLS or a libc `errno` variable.
-- The complete errno namespace, aliases, and values must be defined in a canonical ABI header before implementation.
-- Restart, interruption, partial completion, blocking and cancellation behavior are specified per syscall; carry-flag signaling does not define those semantics by itself.
+- The canonical errno namespace, aliases, and values must be defined in this repository before syscall implementation.
+- Restart, interruption, partial completion, blocking and cancellation behavior are specified per syscall; carry signaling does not define those semantics by itself.
 
 This convention permits successful signed values, including negative timestamps where an interface permits them, without colliding with an error range.
 
@@ -81,31 +85,25 @@ This convention permits successful signed values, including negative timestamps 
 
 ## 6. Blocking and cancellation
 
-The calling convention only defines entry and result transport. Individual syscall specifications must additionally define:
-- whether the operation can block;
-- which clock governs timeouts;
-- whether and how signals interrupt it;
-- whether partial progress is returned;
-- whether the kernel may transparently restart it;
-- how Wlibc cancellation points can interrupt a blocked operation without violating POSIX behavior.
+The calling convention only defines entry and result transport. Individual syscall specifications must additionally define whether the operation can block, which clock governs timeouts, signal interruption/restart, partial progress, and cancellation-point behavior. Do not copy Linux futex, clone, restart-block or signal-frame semantics by assumption.
 
-Do not copy Linux futex, clone, restart-block or signal-frame semantics by assumption. Specify Wicofe equivalents based on the required POSIX behavior.
-
-## 7. Required validation before adoption
+## 7. Mandatory validation before implementation is considered complete
 
 1. Assembly-level x86-64 and AArch64 tests for syscall entry, result, carry state and register preservation.
-2. Kernel return-path tests for both success and error cases.
+2. Kernel return-path tests for success and error cases.
 3. Tests proving negative successful return values remain distinguishable from errors.
-4. Interrupt and signal-return tests proving the carry flag survives the return path as specified.
-5. Compiler/ABI tests for inline assembly constraints under supported GCC and Clang versions.
+4. Interrupt and signal-return tests proving carry survives the return path as specified.
+5. Compiler/ABI tests for supported GCC and Clang versions, including optimization and LTO configurations where supported.
 6. Review against the Wicofe executable ABI, signal ABI, and kernel entry implementation.
+7. QEMU runtime tests on both architectures; build-only compilation is insufficient.
 
-## 8. Open decisions
+## 8. Remaining specification work
 
-- Confirm whether CF/PSTATE.C error signaling is accepted.
-- Define the canonical errno values and public header generation.
-- Confirm exact preservation/clobber rules with the kernel entry implementation.
-- Define syscall identifier ranges and ABI version negotiation.
-- Define per-operation interruption/restart/cancellation behavior.
+The carry-flag decision is accepted. The following are still open and must be specified before the ABI is declared stable:
+- canonical errno values and public header generation;
+- exact GPR preservation and condition-code clobber contract;
+- syscall identifier ranges and ABI version/capability discovery;
+- signal-frame representation and restoration of user condition state;
+- per-syscall interruption, restart, blocking and cancellation behavior.
 
-No implementation may hardcode this proposal until its status is changed to Accepted by an explicit architecture decision.
+No syscall numbers are implied or assigned by this calling-convention decision.

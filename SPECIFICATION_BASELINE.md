@@ -26,6 +26,8 @@ The userspace ABI must support the native ISO C/POSIX runtime contract documente
 
 ## 3. Planned interface domains
 
+The initial C runtime target is ISO C17 and IEEE Std 1003.1-2024 (POSIX.1-2024). Wlibc-specific kernel capability requirements are enumerated in [Wlibc Native ABI Requirements 0.1](docs/WLIBC_ABI_REQUIREMENTS_0.1.md).
+
 The initial ABI is expected to cover these domains in dependency order:
 
 1. Process and thread lifecycle.

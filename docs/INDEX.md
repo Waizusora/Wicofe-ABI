@@ -8,6 +8,9 @@ This directory contains documentation for the public Wicofe userspace/kernel ABI
 - [Frenit ABI requirements 0.1](FRENIT_ABI_REQUIREMENTS_0.1.md) — capability requirements without syscall numbers or layouts.
 - [Wlibc Native ABI Requirements 0.1](WLIBC_ABI_REQUIREMENTS_0.1.md) — kernel ABI prerequisites for the native ISO C/POSIX runtime.
 - [Syscall calling convention 0.1](SYSCALL_CALLING_CONVENTION_PROPOSAL_0.1.md) — adopted x86-64/AArch64 entry and carry-flag error-return convention; implementation validation pending.
+- [Errno namespace 0.1](ERRNO_NAMESPACE_0.1.md) — canonical positive raw error values and aliases.
+- [Syscall register preservation 0.1](SYSCALL_REGISTER_PRESERVATION_0.1.md) — preserved/clobbered GPRs and condition-code contract.
+- [C errno header](../include/wicofe/errno.h) — public numeric constants matching the canonical errno namespace.
 - [Syscall convention technical review 0.1](SYSCALL_CONVENTION_TECHNICAL_REVIEW_0.1.md) — adopted decision, architecture/compiler constraints, and required runtime validation.
 
 ## Scope

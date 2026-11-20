@@ -11,7 +11,7 @@ This repository is the canonical source for the public interface between Wicofe 
 
 The Dynamic Kernel Module ABI is not defined here. DKM is a privileged in-kernel interface owned by Wicofe-Kernel and documented separately.
 
-The userspace ABI must support the native ISO C/POSIX runtime contract documented in the [Unix userspace foundation specification](https://github.com/Waizusora/Wicofe-Specs/blob/main/userspace/UNIX_USERSPACE_FOUNDATION_0.1.md). POSIX library interfaces are implemented by Wlibc; they are not automatically one-to-one with syscalls.
+The userspace ABI must support the native ISO C/POSIX runtime contract documented in the [Unix userspace foundation specification](https://github.com/Waizusora/Wicofe-Spec/blob/main/userspace/UNIX_USERSPACE_FOUNDATION_0.1.md). POSIX library interfaces are implemented by Wlibc; they are not automatically one-to-one with syscalls.
 
 ## 2. Design principles
 

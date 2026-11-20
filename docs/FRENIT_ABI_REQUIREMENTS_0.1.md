@@ -4,7 +4,7 @@
 - **Owner:** Wicofe-ABI.
 - **Consumer:** [Frenit — Free Init](https://github.com/Waizusora/Frenit).
 - **Kernel implementation:** [Wicofe-Kernel](https://github.com/Waizusora/Wicofe-Kernel).
-- **Cross-component contract:** [WIC-SPEC-BOOT-FRENIT-001](https://github.com/Waizusora/Wicofe-Specs/blob/main/boot/FRENIT_INTEGRATION_CONTRACT_0.1.md).
+- **Cross-component contract:** [WIC-SPEC-BOOT-FRENIT-001](https://github.com/Waizusora/Wicofe-Spec/blob/main/boot/FRENIT_INTEGRATION_CONTRACT_0.1.md).
 - **Date:** 2026-11-18
 
 ## 1. Purpose and boundary
